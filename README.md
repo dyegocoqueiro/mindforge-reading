@@ -16,7 +16,7 @@ npm install
 Copy-Item .env.example .env.local
 ```
 
-Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` com os valores públicos do projeto. Nunca coloque a service role no cliente.
+Preencha `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` com os valores públicos do projeto. A chave legada `NEXT_PUBLIC_SUPABASE_ANON_KEY` também é aceita. Nunca coloque a service role no cliente.
 
 ## Banco e autenticação
 
