@@ -11,7 +11,7 @@ import { createSupabaseBrowserClient } from "../lib/supabase/client";
 export function LessonReader({ lesson, signedIn, initialComplete }: { lesson: Lesson; signedIn: boolean; initialComplete: boolean }) {
   const meta = collectionMeta[lesson.collection];
   async function save(score: number) {
-    const client = createSupabaseBrowserClient(); if (!client) return;
+    const client = await createSupabaseBrowserClient(); if (!client) return;
     const { data: { user } } = await client.auth.getUser(); if (!user) return;
     await Promise.all([client.from("learning_progress").upsert({ user_id: user.id, lesson_slug: lesson.slug, status: "completed", score, completed_at: new Date().toISOString(), updated_at: new Date().toISOString() }), client.from("practice_attempts").insert({ user_id: user.id, lesson_slug: lesson.slug, exercise_kind: "lesson_review", score, metadata: { edition: meta.edition } })]);
   }

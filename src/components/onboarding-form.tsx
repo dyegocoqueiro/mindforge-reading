@@ -17,7 +17,7 @@ export function OnboardingForm() {
   async function save(data: FormData) {
     const parsed = onboardingSchema.safeParse({ goal: data.get("goal"), interest: data.get("interest"), minutes: data.get("minutes"), frequency: data.get("frequency"), device: data.get("device"), preferredTime: data.get("preferredTime"), fontSize: data.get("fontSize"), theme: data.get("theme"), perceivedDifficulty: data.get("perceivedDifficulty"), readingHabit: data.get("readingHabit"), distractions: data.get("distractions"), textLength: data.get("textLength"), reminders: data.get("reminders") === "on" });
     if (!parsed.success) return setMessage("Revise os campos e tente novamente.");
-    const client = createSupabaseBrowserClient();
+    const client = await createSupabaseBrowserClient();
     if (!client) return setMessage("Configure o Supabase para salvar seu perfil.");
     setSaving(true);
     const { data: { user } } = await client.auth.getUser();

@@ -19,16 +19,18 @@ export function applyReadingPreferences(preferences: ReadingPreferences) {
 
 export function PreferenceSync() {
   useEffect(() => {
-    const client = createSupabaseBrowserClient();
-    if (!client) return;
-    void client.auth.getUser().then(async ({ data: { user } }) => {
+    let active = true;
+    void (async () => {
+      const client = await createSupabaseBrowserClient();
+      if (!client || !active) return;
+      const { data: { user } } = await client.auth.getUser();
       if (!user) return;
       const { data } = await client.from("user_preferences").select("theme,font_size,line_height").eq("user_id", user.id).maybeSingle();
-      if (data) applyReadingPreferences({ theme: data.theme, fontSize: data.font_size, lineHeight: Number(data.line_height) });
-    });
+      if (data && active) applyReadingPreferences({ theme: data.theme, fontSize: data.font_size, lineHeight: Number(data.line_height) });
+    })();
     const listener = (event: Event) => applyReadingPreferences((event as CustomEvent<ReadingPreferences>).detail);
     window.addEventListener("mindforge:preferences", listener);
-    return () => window.removeEventListener("mindforge:preferences", listener);
+    return () => { active = false; window.removeEventListener("mindforge:preferences", listener); };
   }, []);
   return null;
 }

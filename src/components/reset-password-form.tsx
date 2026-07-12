@@ -14,7 +14,7 @@ export function ResetPasswordForm() {
     const password = schema.safeParse(data.get("password"));
     if (!password.success) return setMessage(password.error.issues[0].message);
     if (password.data !== data.get("confirmation")) return setMessage("A confirmação de senha não corresponde.");
-    const client = createSupabaseBrowserClient();
+    const client = await createSupabaseBrowserClient();
     if (!client) return setMessage("Configure o Supabase para redefinir a senha.");
     setSaving(true);
     const { error } = await client.auth.updateUser({ password: password.data });

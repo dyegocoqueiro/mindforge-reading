@@ -20,7 +20,7 @@ export function PreferencesForm({ defaults }: { defaults: Defaults }) {
   async function save(data: FormData) {
     const parsed = schema.safeParse(Object.fromEntries(data));
     if (!parsed.success) return setMessage("Revise os valores informados.");
-    const client = createSupabaseBrowserClient();
+    const client = await createSupabaseBrowserClient();
     if (!client) return setMessage("Banco indisponível.");
     const { data: { user } } = await client.auth.getUser();
     if (!user) return setMessage("Entre para alterar suas preferências.");
