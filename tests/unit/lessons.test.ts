@@ -2,10 +2,10 @@ import { describe, expect, it } from "vitest";
 import { collectionMeta, lessons } from "../../src/content/lessons";
 
 describe("didactic catalog", () => {
-  it("contains the 18 required original lessons", () => {
-    expect(lessons).toHaveLength(18);
-    expect(new Set(lessons.map((lesson) => lesson.slug)).size).toBe(18);
-    expect(lessons.map((lesson) => lesson.order)).toEqual(Array.from({ length: 18 }, (_, index) => index + 1));
+  it("contains the 27 required original lessons", () => {
+    expect(lessons).toHaveLength(27);
+    expect(new Set(lessons.map((lesson) => lesson.slug)).size).toBe(27);
+    expect(lessons.map((lesson) => lesson.order)).toEqual(Array.from({ length: 27 }, (_, index) => index + 1));
   });
 
   it("keeps every lesson actionable and referenced", () => {

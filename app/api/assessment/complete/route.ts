@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     supabase.from("passage_versions").select("id,title,word_count,difficulty_level").eq("id", input.passageVersionId).single(),
     supabase.from("questions").select("id,kind,weight,correct_explanation,question_options(id,is_correct)").eq("passage_version_id", input.passageVersionId),
     supabase.from("concept_rubrics").select("concept_id,label,required_keywords,accepted_synonyms,forbidden_contradictions,weight,required").eq("passage_version_id", input.passageVersionId),
-    supabase.from("user_preferences").select("available_minutes").eq("user_id", user.id).maybeSingle(),
+    supabase.from("user_preferences").select("available_minutes,weekly_frequency,goals,interests,preferred_time").eq("user_id", user.id).maybeSingle(),
   ]);
   if (!passage || !questions?.length) return NextResponse.json({ error: "Conteúdo da avaliação não encontrado." }, { status: 404 });
 
@@ -97,7 +97,7 @@ export async function POST(request: Request) {
   const strengths = Object.entries(scores).filter(([, value]) => value >= 0.7).map(([key]) => key);
   const priorities = Object.entries(weights).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([key]) => key);
   const { data: diagnosis } = await supabase.from("diagnostic_results").insert({ assessment_run_id: input.runId, user_id: user.id, profile_tags: profiles, strengths, priorities, safety_notes: speedScore >= 0.7 && comprehensionScore < 0.6 ? ["O ritmo não será aumentado enquanto a compreensão estiver abaixo de 60%."] : [], engine_version: "rules-2.0" }).select("id").single();
-  const { data: plan } = await supabase.from("training_plans").insert({ user_id: user.id, diagnostic_result_id: diagnosis?.id ?? null, status: "active", priority_weights: weights, weekly_goal: { sessions: 5, minutes: requestedMinutes }, progression_criteria: { essential_completion: 0.8, comprehension: 0.75, delayed_retention: 0.65 }, engine_version: "rules-2.0" }).select("id").single();
+  const { data: plan } = await supabase.from("training_plans").insert({ user_id: user.id, diagnostic_result_id: diagnosis?.id ?? null, status: "active", priority_weights: weights, weekly_goal: { sessions: preferences?.weekly_frequency ?? 5, minutes: requestedMinutes, goals: preferences?.goals ?? [], interests: preferences?.interests ?? [], preferred_time: preferences?.preferred_time ?? null }, progression_criteria: { essential_completion: 0.8, comprehension: 0.75, delayed_retention: 0.65 }, engine_version: "rules-3.0" }).select("id").single();
   if (plan) {
     const blocks = Object.entries(minutes).map(([skill, duration]) => ({ skill, minutes: duration, objective: blockObjective(skill) }));
     await supabase.from("training_plan_days").insert(Array.from({ length: 8 }, (_, index) => ({ training_plan_id: plan.id, day_number: index + 1, total_minutes: requestedMinutes, blocks, status: "planned", scheduled_for: new Date(Date.now() + index * 86400000).toISOString().slice(0, 10) })));

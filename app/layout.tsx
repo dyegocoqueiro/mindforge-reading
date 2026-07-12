@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { PwaRegister } from "../src/components/pwa-register";
+import { PreferenceSync } from "../src/components/preference-sync";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body>{children}<PwaRegister /></body>
+      <body>{children}<PreferenceSync /><PwaRegister /></body>
     </html>
   );
 }
