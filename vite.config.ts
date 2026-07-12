@@ -43,7 +43,17 @@ export default defineConfig(async () => {
   // Wrangler snapshots its log path while the Cloudflare plugin is imported.
   const { cloudflare } = await import("@cloudflare/vite-plugin");
 
+  // Vinext/Vite does not replace Next-style public variables automatically in
+  // client chunks. Define only Supabase's public URL and publishable key at
+  // build time; private server credentials must never be added here.
+  const publicEnvironment: Record<string, string> = {};
+  for (const key of ["NEXT_PUBLIC_SUPABASE_URL", "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", "NEXT_PUBLIC_SUPABASE_ANON_KEY"] as const) {
+    const value = process.env[key];
+    if (value) publicEnvironment[`process.env.${key}`] = JSON.stringify(value);
+  }
+
   return {
+    define: publicEnvironment,
     server: isCodexSeatbeltSandbox
       ? { watch: { useFsEvents: false, usePolling: true } }
       : undefined,

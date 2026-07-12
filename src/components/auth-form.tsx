@@ -18,7 +18,7 @@ export function AuthForm({ mode, redirectTo = "/app" }: { mode: Mode; redirectTo
     const email = emailSchema.safeParse(formData.get("email"));
     if (!email.success) return setStatus({ kind: "error", message: email.error.issues[0].message });
     const client = createSupabaseBrowserClient();
-    if (!client) return setStatus({ kind: "error", message: "O Supabase ainda não está configurado neste ambiente. Consulte o README para conectar o banco real." });
+    if (!client) return setStatus({ kind: "error", message: "A configuração segura não foi carregada. Atualize a página e tente novamente." });
     setLoading(true);
     try {
       if (mode === "recover") {
