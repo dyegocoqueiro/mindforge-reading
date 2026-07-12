@@ -9,7 +9,7 @@ type Mode = "login" | "signup" | "recover";
 const emailSchema = z.string().email("Informe um e-mail válido.");
 const passwordSchema = z.string().min(8, "Use pelo menos 8 caracteres.");
 
-export function AuthForm({ mode }: { mode: Mode }) {
+export function AuthForm({ mode, redirectTo = "/app" }: { mode: Mode; redirectTo?: string }) {
   const [status, setStatus] = useState<{ kind: "error" | "success"; message: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +31,8 @@ export function AuthForm({ mode }: { mode: Mode }) {
       if (mode === "login") {
         const { error } = await client.auth.signInWithPassword({ email: email.data, password: password.data });
         if (error) throw error;
-        window.location.assign("/app");
+        const safeNext = redirectTo.startsWith("/") && !redirectTo.startsWith("//") ? redirectTo : "/app";
+        window.location.assign(safeNext);
         return;
       }
       const name = z.string().min(2, "Informe seu nome.").safeParse(formData.get("name"));

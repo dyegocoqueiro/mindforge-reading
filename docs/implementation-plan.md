@@ -1,79 +1,63 @@
 # Plano de implementação
 
-Atualizado em 2026-07-10. Uma fase só recebe status concluída depois de lint, typecheck, testes e build, além da validação das integrações externas aplicáveis.
+Atualizado em 2026-07-12. Uma fase só recebe status concluída após lint, typecheck, testes, build e validação das integrações externas aplicáveis.
 
-## Fase 1 — Fundação — concluída no código
+## Fase 1 — Fundação — concluída
 
-Entregue: documentação-base, design system mobile-first, navegação, Supabase SSR/Auth, confirmação e recuperação de conta, onboarding, schema PostgreSQL/RLS, PWA básica, página offline e CI. O fluxo não cria persistência alternativa quando o Supabase está ausente.
+Design system responsivo, autenticação Supabase SSR, renovação de sessão por `proxy.ts`, onboarding, PostgreSQL/RLS, PWA, CI e navegação autenticada. Cadastro e login usam o projeto Supabase real; sair é uma ação explícita.
 
-Validação: lint, typecheck e 18 testes automatizados passaram; build de produção passou. Cadastro/login e e-mail ainda exigem smoke test em um projeto Supabase configurado.
+## Fase 2 — Conteúdo — concluída para o catálogo do aluno
 
-## Fase 2 — Conteúdo — parcialmente implementada
+15 passagens originais `seed`, perguntas, alternativas, rubricas e biblioteca graduada. A área Aprender contém três edições com capas originais, 18 lições completas, exemplos, atividades, revisão ativa, referências e progresso persistente.
 
-Entregue: passagens versionadas, perguntas, opções, rubricas, workflow no schema, biblioteca persistente e 15 textos originais `seed`, três por nível.
+Limitação: o editor administrativo rico e o workflow visual de aprovação continuam pendentes; o conteúdo entregue é versionado no repositório e no banco.
 
-Pendente: editor administrativo completo, preview, publicação e versionamento por interface. A tela atual aplica autorização real, mas não finge edição inexistente.
+## Fase 3 — Avaliação — concluída
 
-## Fase 3 — Avaliação — parcialmente implementada
+Fluxo autenticado e cronometrado com preparação, leitura, régua seletiva, pausa, compreensão ponderada, confiança, recordação imediata, tarefa intermediária, retenção atrasada, estabilidade e resultado. A conclusão persiste run, eventos, respostas e métricas e foi validada ponta a ponta no Supabase de produção.
 
-Entregue: tabelas de runs, eventos, respostas e métricas; funções puras de WPM, pesos, índice efetivo, calibração, confiança e perfis; introdução autenticada que seleciona conteúdo real.
+## Fase 4 — Motor adaptativo — concluída para a primeira avaliação
 
-Pendente: máquina de estados interativa dos dez blocos, pausa/timers, persistência de respostas, retenção atrasada e tela final.
+Motor determinístico gratuito `rules-2.0`, sem API externa, calcula WPM, compreensão, retenção, estabilidade, vocabulário, calibração, índice efetivo, confiança, perfis e prioridades. Gera plano persistente e oito sessões iniciais. As funções centrais permanecem puras em `src/domain`.
 
-## Fase 4 — Motor adaptativo — núcleo implementado
+Limitação: recomendações de texto livre usam rubricas declaradas; não alegam compreensão semântica profunda.
 
-Entregue: prioridades, guardas de compreensão/retenção, alocação exata para 10/15/20/30 minutos, progressão e interfaces de análise sem IA externa, com testes unitários.
+## Fase 5 — Treino — funcional básico
 
-Pendente: serviço transacional que gera e persiste as 56 sessões a partir de uma avaliação concluída e testes de integração com PostgreSQL.
+Plano diário é exibido bloco a bloco e pode ser concluído e salvo. O laboratório oferece régua seletiva, unidades de sentido e recuperação ativa com tentativas persistentes.
 
-## Fase 5 — Treino — parcialmente implementada
-
-Entregue: modelo de exercícios, assignments, tentativas idempotentes, sessões e eventos; rota que consulta sessão planejada real.
-
-Pendente: leitor ajustável, execução bloco a bloco, feedback e conclusão transacional.
+Pendente: ampliar o catálogo para os 30 tipos de exercício e gerar todas as 56 sessões detalhadas do programa de oito semanas.
 
 ## Fase 6 — Memória — núcleo implementado
 
-Entregue: algoritmo transparente de revisão espaçada, bloqueio de “fácil” quando incorreto, tabelas de fila/tentativas e listagem real de itens vencidos.
+Fila real, algoritmo transparente de repetição espaçada, item criado após avaliação e bloqueio de avanço fácil quando a resposta está incorreta.
 
-Pendente: resposta interativa, flashcards e atualização atômica da agenda.
+Pendente: resposta interativa de todos os tipos de item e notificações internas.
 
-## Fase 7 — Dashboard — parcialmente implementada
+## Fase 7 — Dashboard — funcional básico
 
-Entregue: resumo real da última avaliação, plano e revisões; histórico sempre associa ritmo, compreensão, retenção e índice efetivo.
+Dashboard, histórico e plano usam dados reais. Ritmo sempre aparece junto a compreensão, retenção e índice efetivo.
 
-Pendente: metas, conquistas, médias móveis e gráficos acessíveis.
+Pendente: médias móveis, metas, conquistas e gráficos acessíveis detalhados.
 
 ## Fase 8 — Offline e sincronização — núcleo implementado
 
-Entregue: service worker, página offline, IndexedDB para conteúdo e outbox, deduplicação por UUID, remoção apenas após confirmação e teste de integração.
-
-Pendente: endpoint autenticado de sync, indicador visual de status e download explícito de sessão.
+Service worker, página offline, IndexedDB e outbox idempotente estão presentes. Pendente conectar todos os novos fluxos de avaliação e treino à fila offline.
 
 ## Fase 9 — Qualidade — em andamento
 
-Entregue: TypeScript estrito, ESLint, Vitest, Playwright configurado, redução de movimento, foco visível, landmarks, RLS, constraints, documentação de privacidade e pipeline CI.
+TypeScript estrito, ESLint, Vitest, redução de movimento, foco visível, RLS e documentação. Estado validado em 2026-07-12: lint, typecheck, 20 testes e build passaram; smoke autenticado confirmou login, permanência da sessão, catálogo, avaliação, plano e histórico.
 
-Pendente: suíte E2E dos fluxos completos, auditoria automatizada de acessibilidade, rate limit/CAPTCHA de produção, revisão manual AA, testes RLS e revisão jurídica LGPD.
+Pendente: ampliar E2E automatizado, auditoria AA completa, CAPTCHA/rate limit de produção e revisão jurídica LGPD.
 
-## Fase 10 — Deploy — preparada, não executada
+## Fase 10 — Deploy — em andamento
 
-Entregue: build Cloudflare Worker compatível, `.env.example`, documentação de Supabase, backup, rollback e checklist.
+Supabase de produção, migrations, seed, variáveis Sites e publicação estão configurados. A revisão atual será publicada após o último commit e pipeline.
 
-Pendente: credenciais/ambiente Supabase de produção, configuração de e-mail, domínio, monitoramento, publicação e smoke test de produção.
+## Decisões permanentes
 
-## Registro de decisões
-
-- Supabase/PostgreSQL permanece fonte de verdade; storage do navegador não substitui banco.
-- Integração de IA fica desativada e isolada por interface.
-- Motores usam funções puras e versões explícitas.
-- Conteúdo demo é seed original, nunca dado fingido em runtime.
-- A hospedagem Sites não substitui Supabase porque a especificação exige PostgreSQL, Supabase Auth e RLS.
-
-## Próxima sequência segura
-
-1. Implementar a avaliação transacional completa e seus testes de integração.
-2. Persistir o plano de oito semanas a partir do resultado validado.
-3. Implementar execução e conclusão do treino.
-4. Conectar revisão e sync offline a endpoints idempotentes.
-5. Completar admin, E2E, acessibilidade e implantação.
+- Supabase/PostgreSQL é a fonte de verdade; storage do navegador não substitui banco.
+- A “análise adaptativa” é um motor gratuito de regras auditável, não uma API paga nem diagnóstico clínico.
+- Compreensão abaixo de 0,60 ou retenção abaixo de 0,50 bloqueia destaque de velocidade.
+- Capas e conteúdo didático são originais e redistribuíveis.
+- Respostas livres não são enviadas a analytics nem a provedores externos.

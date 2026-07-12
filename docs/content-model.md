@@ -1,5 +1,9 @@
 # Modelo de conteúdo
 
+## Material didático
+
+As 18 lições de **Fundamentos da Leitura Ativa** vivem em `src/content/lessons.ts`, organizadas em três edições. Cada lição declara objetivo, explicação, exemplo, atividade, pergunta de recuperação, resposta e referências. `learning_progress` registra conclusão por usuário; `practice_attempts` registra somente tipo, pontuação, duração e metadados mínimos, sem guardar o rascunho privado.
+
 ## Passagens
 
 `passages` mantém identidade e workflow; `passage_versions` contém texto imutável, idioma, tema, palavras, dificuldades lexical/sintática, conhecimento prévio, estrutura, tempo, licença, autoria e fonte. Estados: rascunho → revisão → aprovado → publicado → arquivado.
