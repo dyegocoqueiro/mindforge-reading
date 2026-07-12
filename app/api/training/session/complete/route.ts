@@ -16,6 +16,10 @@ export async function POST(request: Request) {
     supabase.from("training_block_attempts").select("block_key,score").eq("training_plan_day_id", parsed.data.dayId).eq("user_id", user.id),
   ]);
   if (!day) return NextResponse.json({ error: "Sessão não encontrada." }, { status: 404 });
+  if (day.status === "completed") {
+    const { data: existing } = await supabase.from("training_session_summaries").select("average_score,review_items_created").eq("training_plan_day_id", parsed.data.dayId).eq("user_id", user.id).maybeSingle();
+    return NextResponse.json({ average: Number(existing?.average_score ?? 0), reviewsCreated: existing?.review_items_created ?? 0, idempotent: true });
+  }
   const required = (day.blocks as Array<{ skill: string; minutes: number }>).filter((block) => block.minutes > 0).map((block) => block.skill);
   const completed = new Set((attempts ?? []).map((attempt) => attempt.block_key));
   const missing = required.filter((skill) => !completed.has(skill));
